@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Comment on Movie</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input, textarea, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    input, textarea {
+      width: 100%;
+      background-color: #1f1f1f;
+      color: white;
+    }
+
+    button {
+      background-color: #2196f3;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1976d2;
+    }
+
+    p {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Leave a Comment</h1>
+
+  <input type="text" id="movieId" placeholder="Movie ID" />
+  <input type="text" id="userName" placeholder="Your Name" />
+  <textarea id="comment" rows="4" placeholder="Your Comment"></textarea>
+  <button onclick="postComment()">Submit Comment</button>
+
+  <p id="response"></p>
+
+  <script>
+    async function postComment() {
+      const movie_id = document.getElementById('movieId').value.trim();
+      const user_name = document.getElementById('userName').value.trim();
+      const comment = document.getElementById('comment').value.trim();
+      const response = document.getElementById('response');
+
+      const res = await fetch('http://localhost:3000/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movie_id, user_name, comment })
+      });
+
+      const result = await res.json();
+
+      if (result.error) {
+        response.textContent = '❌ Error: ' + result.error.message;
+        response.style.color = 'red';
+      } else {
+        response.textContent = '✅ Comment submitted successfully!';
+        response.style.color = 'lightgreen';
+        document.getElementById('comment').value = '';
+      }
+    }
+  </script>
+
+</body>
+</html>

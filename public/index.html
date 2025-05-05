@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: white;
+      background-image: url('https://i.postimg.cc/K8Y4w8by/487506104-632445376273608-2035865230541510449-n-50-1-50.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      font-size: 2rem;
+    }
+
+    nav input {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 240px;
+    }
+
+    nav button {
+      padding: 10px 14px;
+      background-color: #ff9800;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    section#categories {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    section#categories button {
+      padding: 10px 16px;
+      background-color: #333;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #movie-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .movie-card {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .movie-card:hover {
+      transform: scale(1.05);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 1px solid #333;
+    }
+
+    .movie-info {
+      padding: 12px 15px;
+    }
+
+    .movie-info h3 {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      text-align: center;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: #bbb;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .overlay-content {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .overlay-content p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .overlay-content button {
+      padding: 10px 20px;
+      background-color: #ff9800;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      header .container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav input {
+        width: 180px;
+        margin-top: 10px;
+      }
+
+      #movie-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .movie-card {
+        margin: 0;
+      }
+
+      footer {
+        position: static;
+        margin-top: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      #movie-list {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .whatsapp-chat {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 999;
+      width: 60px;
+      height: 60px;
+      background-color: #25d366;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-chat:hover {
+      transform: scale(1.1);
+    }
+
+    .whatsapp-chat img {
+      width: 35px;
+      height: 35px;
+    }
+
+    .web-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      display: inline-block;
+      background-color: #ffffff10;
+      padding: 6px;
+      border-radius: 50%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .web-icon img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .web-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="messageOverlay" class="overlay">
+    <div class="overlay-content">
+      <p>Iyi website ikubiyemo ibyiciro firime zisobanuye ndetse na video za 18+ muri adult room. <br><br>Niba uri umwana ntiwemerewe kujya muri adult room. <br><br>Murakoze.</p>
+      <button onclick="hideOverlay()">OK</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <h1>
+        agasobanuye
+        <img src="https://img.icons8.com/?size=100&id=98A4yZTt9abw&format=png&color=000000" alt="icon" style="width: 24px; height: 24px; vertical-align: middle;" />
+      </h1>
+      
+      <nav>
+        <input type="text" id="search-input" placeholder="Search for movies..." />
+        <button onclick="searchMovies()">Search</button>
+      </nav>
+    </div>
+  </header>
+
+  <section id="categories">
+    <button onclick="filterByCategory('Action')">Action</button>
+    <button onclick="filterByCategory('Comedy')">SEASONS</button>
+    <button onclick="filterByCategory('Drama')">INDIA</button>
+    <button onclick="filterByCategory('Horror')">Horror</button>
+  </section>
+
+  <section id="movie-list" class="container">
+    <!-- Movies will be loaded here -->
+  </section>
+
+  <footer>
+    <p>&copy; 2025 agasobanuye. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const API_URL = 'http://localhost:3000/movies';
+    let currentMovies = [];
+
+    window.onload = () => {
+      fetchMovies();
+    };
+
+    function hideOverlay() {
+      document.getElementById('messageOverlay').style.display = 'none';
+    }
+
+    async function fetchMovies() {
+      try {
+        const response = await fetch(API_URL);
+        const result = await response.json();
+        currentMovies = result.data;
+        renderMovies(currentMovies);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    }
+
+    function renderMovies(movies) {
+      const movieList = document.getElementById('movie-list');
+      movieList.innerHTML = '';
+
+      movies.forEach(movie => {
+        const movieCard = document.createElement('div');
+        movieCard.className = 'movie-card';
+        movieCard.innerHTML = `
+          <img src="${movie.thumbnail}" alt="${movie.name}" />
+          <div class="movie-info">
+            <h3>${movie.name}</h3>
+          </div>
+        `;
+        movieCard.addEventListener('click', () => {
+          window.location.href = `movie.html?id=${movie.id}`;
+        });
+        movieList.appendChild(movieCard);
+      });
+    }
+
+    async function searchMovies() {
+      const query = document.getElementById('search-input').value;
+      const searchURL = `http://localhost:3000/search?q=${query}`;
+
+      try {
+        const response = await fetch(searchURL);
+        const result = await response.json();
+        renderMovies(result.data);
+      } catch (error) {
+        console.error('Error searching movies:', error);
+      }
+    }
+
+    function filterByCategory(category) {
+      const filteredMovies = currentMovies.filter(movie => movie.category === category);
+      renderMovies(filteredMovies);
+    }
+
+    const adultButton = document.createElement('button');
+    adultButton.textContent = 'Adult Room 🔞';
+    adultButton.style.backgroundColor = '#ff3b3b';
+    adultButton.style.border = '2px solid #ff9800';
+    adultButton.style.color = 'white';
+    adultButton.style.fontWeight = 'bold';
+    adultButton.style.transition = '0.3s ease';
+
+    adultButton.onmouseover = () => {
+      adultButton.style.backgroundColor = '#e53935';
+    };
+    adultButton.onmouseout = () => {
+      adultButton.style.backgroundColor = '#ff3b3b';
+    };
+    adultButton.onclick = () => {
+      window.location.href = 'adult.html';
+    };
+
+    document.getElementById('categories').appendChild(adultButton);
+  </script>
+
+  <a href="https://wa.me/250791820286" target="_blank" class="whatsapp-chat" title="Chat with us on WhatsApp">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp Icon">
+  </a>
+
+  <a href="index.html" class="web-icon">
+    <img src="https://i.postimg.cc/K8Y4w8by/487506104-632445376273608-2035865230541510449-n-50-1-50.jpg" alt="Home Icon">
+  </a>
+
+</body>
+</html>

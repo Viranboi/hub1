@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adult Room 🔞</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; }
+    .video-card { background: #222; padding: 10px; margin: 10px; border-radius: 8px; }
+    .thumbnail { width: 100%; height: auto; border-radius: 6px; }
+    .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+    .lock { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Adult Room 🔞</h1>
+
+  <h2>Free Videos</h2>
+  <div id="free-videos" class="video-grid"></div>
+
+  <h2>Premium Videos</h2>
+  <div id="premium-videos" class="video-grid"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://rlfofgnlqifescpqaklf.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZm9mZ25scWlmZXNjcHFha2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNjU5OTgsImV4cCI6MjA2MTk0MTk5OH0.TBFKhTKfzs7ZgU3OEoR_Y2T4_pFsbolkzw182U9EAiU';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function fetchVideos() {
+      let { data, error } = await supabase.from('adult_videos').select('*');
+      if (error) return console.error('Error fetching videos:', error);
+
+      data.forEach(video => {
+        const container = document.createElement('div');
+        container.className = 'video-card';
+
+        container.innerHTML = `
+          <img src="${video.thumbnail}" class="thumbnail" />
+          <h3>${video.name}</h3>
+          <p>${video.description}</p>
+          <button onclick="handleVideo(${JSON.stringify(video).replace(/"/g, '&quot;')})">
+            ${video.category === 'premium' ? '🔒 Watch (Premium)' : '▶️ Watch Now'}
+          </button>
+        `;
+
+        document.getElementById(video.category === 'premium' ? 'premium-videos' : 'free-videos')
+                .appendChild(container);
+      });
+    }
+
+    function handleVideo(video) {
+      if (video.category === 'free') {
+        window.open(video.video_url, '_blank');
+      } else {
+        const code = prompt('Enter password to unlock this video:\nIf you don’t have it, contact +250791820286 on WhatsApp.');
+        if (video.passwords.includes(code)) {
+          window.open(video.video_url, '_blank');
+        } else {
+          alert('Incorrect password!');
+        }
+      }
+    }
+
+    fetchVideos();
+  </script>
+</body>
+</html>

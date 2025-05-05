@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adult Movies 🔞</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+    }
+
+    header {
+      background-color: #1f1f1f;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      color: #ff3b3b;
+      font-size: 2rem;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .movie-card {
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 59, 59, 0.2);
+      transition: transform 0.3s;
+    }
+
+    .movie-card:hover {
+      transform: scale(1.05);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .movie-card .title {
+      padding: 10px;
+      text-align: center;
+      color: #ffc107;
+      font-weight: bold;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: #333;
+    }
+
+    footer {
+      text-align: center;
+      background-color: #1a1a1a;
+      padding: 15px;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Adult Movie Room 🔞</h1>
+  </header>
+
+  <div class="movie-grid">
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x200?text=Adult+Movie+1" alt="Adult Movie 1">
+      <div class="title">Movie Title 1</div>
+    </div>
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x200?text=Adult+Movie+2" alt="Adult Movie 2">
+      <div class="title">Movie Title 2</div>
+    </div>
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x200?text=Adult+Movie+3" alt="Adult Movie 3">
+      <div class="title">Movie Title 3</div>
+    </div>
+    <div class="movie-card">
+      <img src="https://via.placeholder.com/300x200?text=Adult+Movie+4" alt="Adult Movie 4">
+      <div class="title">Movie Title 4</div>
+    </div>
+    <!-- Add more movie cards if needed -->
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅️ Back to Home</button>
+
+  <footer>
+    &copy; 2025 Movie Hub | Adult Section. All rights reserved.
+  </footer>
+
+</body>
+</html>

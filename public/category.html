@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies by Category</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    select {
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+
+    .movie {
+      background-color: #1f1f1f;
+      border: 1px solid #333;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .movie img {
+      max-width: 100px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 5px;
+      padding: 6px 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Movie Category</h1>
+
+  <select id="categorySelect">
+    <option value="">-- Choose a category --</option>
+    <option value="Action">Action</option>
+    <option value="Comedy">Comedy</option>
+    <option value="Drama">Drama</option>
+    <option value="Horror">Horror</option>
+    <option value="Romance">Romance</option>
+    <!-- Add more categories as needed -->
+  </select>
+
+  <div id="movies"></div>
+
+  <script>
+    const categorySelect = document.getElementById('categorySelect');
+    const moviesDiv = document.getElementById('movies');
+
+    categorySelect.addEventListener('change', () => {
+      const selectedCategory = categorySelect.value;
+      if (selectedCategory) {
+        fetch(`http://localhost:3000/movies/${selectedCategory}`)
+          .then(res => res.json())
+          .then(({ data, error }) => {
+            if (error) {
+              moviesDiv.innerHTML = '<p>Error loading movies.</p>';
+              return;
+            }
+
+            moviesDiv.innerHTML = '';
+            if (data.length === 0) {
+              moviesDiv.innerHTML = '<p>No movies found in this category.</p>';
+              return;
+            }
+
+            data.forEach(movie => {
+              const div = document.createElement('div');
+              div.className = 'movie';
+              div.innerHTML = `
+                <h2>${movie.name}</h2>
+                <img src="${movie.thumbnail}" alt="${movie.name}">
+                <p>${movie.description}</p>
+                <button onclick="likeMovie('${movie.id}')">Like</button>
+                <button onclick="commentMovie('${movie.id}')">Comment</button>
+              `;
+              moviesDiv.appendChild(div);
+            });
+          });
+      } else {
+        moviesDiv.innerHTML = '';
+      }
+    });
+
+    function likeMovie(id) {
+      fetch('http://localhost:3000/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      })
+        .then(res => res.json())
+        .then(() => alert('Liked!'));
+    }
+
+    function commentMovie(id) {
+      const user_name = prompt('Your name:');
+      const comment = prompt('Your comment:');
+      fetch('http://localhost:3000/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ movie_id: id, user_name, comment })
+      })
+        .then(res => res.json())
+        .then(() => alert('Comment added!'));
+    }
+  </script>
+</body>
+</html>

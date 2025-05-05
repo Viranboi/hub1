@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search Movies</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1f1f1f;
+      color: white;
+    }
+
+    #results {
+      margin-top: 20px;
+    }
+
+    .movie {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #1e1e1e;
+      border-radius: 5px;
+    }
+
+    .movie img {
+      max-width: 100px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .movie span {
+      vertical-align: middle;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Search Movies</h1>
+
+  <input type="text" id="searchBox" placeholder="Enter movie name..." />
+
+  <div id="results"></div>
+
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const resultsDiv = document.getElementById('results');
+
+    searchBox.addEventListener('input', async () => {
+      const query = searchBox.value.trim();
+
+      if (query.length === 0) {
+        resultsDiv.innerHTML = '';
+        return;
+      }
+
+      const res = await fetch(`http://localhost:3000/search?q=${encodeURIComponent(query)}`);
+      const result = await res.json();
+
+      if (result.error) {
+        resultsDiv.innerHTML = `<p style="color:red;">❌ Error: ${result.error.message}</p>`;
+        return;
+      }
+
+      resultsDiv.innerHTML = '';
+
+      if (result.data.length === 0) {
+        resultsDiv.innerHTML = '<p>No movies found.</p>';
+        return;
+      }
+
+      result.data.forEach(movie => {
+        const movieDiv = document.createElement('div');
+        movieDiv.className = 'movie';
+        movieDiv.innerHTML = `
+          <img src="${movie.thumbnail}" alt="${movie.name}" />
+          <span>${movie.name}</span>
+        `;
+        resultsDiv.appendChild(movieDiv);
+      });
+    });
+  </script>
+
+</body>
+</html>

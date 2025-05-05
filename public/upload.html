@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Movie</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+    }
+
+    input, textarea, select, button {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    input, textarea, select {
+      background-color: #1f1f1f;
+      color: white;
+    }
+
+    button {
+      background-color: #4caf50;
+      cursor: pointer;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Upload New Movie</h1>
+
+  <form id="uploadForm">
+    <input type="text" name="name" placeholder="Movie Name" required />
+    <input type="text" name="link" placeholder="Movie Link" required />
+    <input type="text" name="thumbnail" placeholder="Thumbnail URL" required />
+    
+    <select name="category" required>
+      <option value="">Select Category</option>
+      <option value="Action">Action</option>
+      <option value="Comedy">Comedy</option>
+      <option value="Drama">Drama</option>
+      <option value="Horror">Horror</option>
+      <option value="Romance">Romance</option>
+      <!-- Add more categories as needed -->
+    </select>
+
+    <textarea name="description" placeholder="Movie Description" rows="4" required></textarea>
+    <input type="date" name="date" required />
+    <input type="text" name="owner" placeholder="Uploaded By" required />
+
+    <button type="submit">Upload Movie</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const responseText = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const movieData = {};
+      formData.forEach((value, key) => {
+        movieData[key] = value;
+      });
+
+      const res = await fetch('http://localhost:3000/add-movie', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(movieData)
+      });
+
+      const result = await res.json();
+
+      if (result.error) {
+        responseText.textContent = `❌ Error: ${result.error.message}`;
+        responseText.style.color = 'red';
+      } else {
+        responseText.textContent = '✅ Movie uploaded successfully!';
+        responseText.style.color = 'lightgreen';
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Like Movie</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    input {
+      width: 300px;
+      background-color: #1f1f1f;
+      color: white;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    p {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Like a Movie</h1>
+
+  <input type="text" id="movieId" placeholder="Enter Movie ID" />
+  <button onclick="likeMovie()">Like</button>
+
+  <p id="message"></p>
+
+  <script>
+    async function likeMovie() {
+      const id = document.getElementById('movieId').value.trim();
+      const message = document.getElementById('message');
+
+      const res = await fetch('http://localhost:3000/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      const result = await res.json();
+      if (result.error) {
+        message.textContent = '❌ Error: ' + result.error.message;
+        message.style.color = 'red';
+      } else {
+        message.textContent = '✅ Movie liked successfully!';
+        message.style.color = 'lightgreen';
+      }
+    }
+  </script>
+
+</body>
+</html>
