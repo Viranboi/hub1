@@ -307,24 +307,27 @@
     }
 
     function renderMovies(movies) {
-      const movieList = document.getElementById('movie-list');
-      movieList.innerHTML = '';
+  const movieList = document.getElementById('movie-list');
+  movieList.innerHTML = '';
 
-      movies.forEach(movie => {
-        const movieCard = document.createElement('div');
-        movieCard.className = 'movie-card';
-        movieCard.innerHTML = `
-          <img src="${movie.thumbnail}" alt="${movie.name}" />
-          <div class="movie-info">
-            <h3>${movie.name}</h3>
-          </div>
-        `;
-        movieCard.addEventListener('click', () => {
-          window.location.href = `movie.html?id=${movie.id}`;
-        });
-        movieList.appendChild(movieCard);
-      });
-    }
+  movies.forEach(movie => {
+    const movieCard = document.createElement('div');
+    movieCard.className = 'movie-card';
+    movieCard.innerHTML = `
+      <img src="${movie.thumbnail}" alt="${movie.name}" />
+      <div class="movie-info">
+        <h3>${movie.name}</h3>
+        <p style="font-size: 0.85rem; color: #ff9800; margin-top: 8px;">Category: <span style="color: #ccc;">${movie.category || 'N/A'}</span></p>
+        <p style="font-size: 0.85rem; color: #4caf50;">Owner: <span style="color: #ccc;">${movie.owner || 'Unknown'}</span></p>
+      </div>
+    `;
+    movieCard.addEventListener('click', () => {
+      window.location.href = `movie.html?id=${movie.id}`;
+    });
+    movieList.appendChild(movieCard);
+  });
+}
+
 
     async function searchMovies() {
       const query = document.getElementById('search-input').value;
