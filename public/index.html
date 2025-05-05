@@ -279,7 +279,7 @@
   </footer>
 
   <script>
-    const API_URL = 'http://localhost:3000/movies';
+    const API_URL = 'https://hub1-1.onrender.com/movies';
     let currentMovies = [];
 
     window.onload = () => {
@@ -323,7 +323,7 @@
 
     async function searchMovies() {
       const query = document.getElementById('search-input').value;
-      const searchURL = `http://localhost:3000/search?q=${query}`;
+      const searchURL = `https://hub1-1.onrender.com/search?q=${query}`;
 
       try {
         const response = await fetch(searchURL);
